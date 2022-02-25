@@ -17,7 +17,8 @@
     "ping": "waveorb ping",
     "update": "waveorb update",
     "deploy": "waveorb deploy",
-    "serve": "waveorb serve"
+    "serve": "waveorb serve",
+    "copy": "cp ../weblang/README.md app/pages/index.md"
   },
   "repository": {
     "type": "git",

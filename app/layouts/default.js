@@ -20,6 +20,7 @@ module.exports = async function($) {
       <body>
         <header>
           <nav>
+            <a href="${$.link('index')}">Home</a>
             <a href="${$.link('about')}">About</a>
             <a href="https://github.com/eldoy/weblang">Code</a>
           </nav>
