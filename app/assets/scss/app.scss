@@ -1,0 +1,53 @@
+@import 'vcss.scss';
+
+main {
+  padding: 2rem 0;
+  max-width: 600px;
+}
+
+form button ~ a,
+nav a {
+  margin-left: 0.5rem;
+}
+
+body > header {
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0;
+  nav a {
+    margin: 0 0.5rem;
+  }
+}
+
+a.active {
+  text-decoration: underline;
+}
+
+#flash {
+  text-align: center;
+  padding: 0.5rem;
+  background: $highlight;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  &:first-letter {
+    text-transform: uppercase;
+  }
+  &:empty {
+    display: none;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: baseline;
+  :first-child {
+    flex-grow: 1;
+  }
+}
+
+.list {
+  border-bottom: 1px solid $light;
+  padding: 1rem 0;
+}
