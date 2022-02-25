@@ -18,13 +18,12 @@ module.exports = async function($) {
         ${process.env.NODE_ENV == 'development' ? $.script('/js/dev.js') : ''}
       </head>
       <body>
-        <!--<header>
+        <header>
           <nav>
-            <a href="${$.link('index')}">Home</a>
             <a href="${$.link('about')}">About</a>
+            <a href="https://github.com/eldoy/weblang">Code</a>
           </nav>
         </header>
-        -->
         <script>
           toggleVisibility()
           setActiveLink()

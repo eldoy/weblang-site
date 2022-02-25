@@ -11,8 +11,14 @@ nav a {
 }
 
 body > header {
-  text-align: center;
-  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  opacity: 0.9;
+  text-align: right;
+  padding: 1rem;
   margin: 0;
   nav a {
     margin: 0 0.5rem;
