@@ -9,8 +9,8 @@ module.exports = async function($) {
       <head>
         <meta http-equiv="content-type" content="text/html;charset=utf-8">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <meta name="description" content="Incredible waveorb app">
-        <title>${$.page.title || '♥'} - Waveorb app</title>
+        <meta name="description" content="Weblang Low Code Programming Language">
+        <title>${$.page.title || '♥'} - Weblang</title>
         <link rel="icon" type="image/x-icon" href="/favicon.ico">
         ${$.script('/bundle.js')}
         ${$.style('/bundle.css')}
