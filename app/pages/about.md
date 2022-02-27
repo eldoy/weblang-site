@@ -11,7 +11,7 @@ It is meant to simplify web development by making it:
 - Safe and reasonably fast
 - Can be extended to do anything anywhere
 
-As we move towards automated programming using machine learning, use minimal building blocks if the way forward.
+As we move towards automated programming using machine learning, using minimal building blocks is the way forward.
 
 Weblang _is not_ a general purpose programming language and is very restricted. Most of its features must be added by you, _the programmer_, through extensions.
 
