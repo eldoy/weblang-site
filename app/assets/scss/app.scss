@@ -1,5 +1,12 @@
+$font-size: 17px;
+$font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+
 @import 'vcss.scss';
 @import 'prism.scss';
+
+body {
+  color: #28143c;
+}
 
 main {
   padding: 5rem 0 1rem;
