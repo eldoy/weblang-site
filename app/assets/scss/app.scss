@@ -2,7 +2,7 @@
 @import 'prism.scss';
 
 main {
-  padding: 2rem 0;
+  padding: 5rem 0 1rem;
   max-width: 600px;
 }
 
@@ -18,16 +18,26 @@ body > header {
   width: 100%;
   background: white;
   opacity: 0.9;
-  text-align: right;
   padding: 1rem;
   margin: 0;
-  nav a {
-    margin: 0 0.5rem;
+  nav {
+    max-width: 750px;
+    margin: 0 auto;
+    a {
+      margin: 0 0.5rem;
+    }
   }
 }
 
 a.active {
   text-decoration: underline;
+}
+
+a.navbar-logo {
+  text-decoration: none;
+  img {
+    max-height: 30px;
+  }
 }
 
 #flash {
@@ -46,9 +56,14 @@ a.active {
   }
 }
 
+footer {
+  color: #666;
+  font-size: 95%;
+}
+
 .flex {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   :first-child {
     flex-grow: 1;
   }

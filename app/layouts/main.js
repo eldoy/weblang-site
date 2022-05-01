@@ -11,7 +11,7 @@ module.exports = async function($) {
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <meta name="description" content="Weblang Low Code Programming Language">
         <title>${$.page.title || '♥'} - Weblang</title>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <link rel="icon" type="image/png" href="/img/favicon.png">
         ${$.script('/bundle.js')}
         ${$.style('/bundle.css')}
         <script>window.api = waveorb('${host}')</script>
@@ -19,10 +19,16 @@ module.exports = async function($) {
       </head>
       <body>
         <header>
-          <nav>
-            <a href="${$.link('index')}">Home</a>
-            <a href="${$.link('about')}">About</a>
-            <a href="https://github.com/eldoy/weblang">Code</a>
+          <nav class="flex">
+            <div>
+              <a class="navbar-logo" href="${$.link('index')}">
+                <img src="/img/weblang-horizontal-small.svg" height="30">
+              </a>
+            </div>
+            <div>
+              <a href="${$.link('about')}">About</a>
+              <a href="https://github.com/eldoy/weblang">Code</a>
+            </div>
           </nav>
         </header>
         <script>
