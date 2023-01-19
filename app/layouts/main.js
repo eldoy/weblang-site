@@ -1,9 +1,10 @@
-module.exports = async function($) {
-  const host = process.env.NODE_ENV == 'production'
-    ? 'https://waveorb.com/api'
-    : 'http://localhost:5000'
+module.exports = async function ($) {
+  const host =
+    process.env.NODE_ENV == 'production'
+      ? 'https://weblang.org/api'
+      : 'http://localhost:5777
 
-  return /* html */`
+  return /* html */ `
     <!doctype html>
     <html lang="${$.lang}">
       <head>
@@ -18,6 +19,7 @@ module.exports = async function($) {
         ${$.script('/bundle.js')}
         ${$.style('/bundle.css')}
         <script>window.api = waveorb('${host}')</script>
+        <script defer data-domain="weblang.org" src="https://plausible.io/js/script.js"></script>
         ${process.env.NODE_ENV == 'development' ? $.script('/js/dev.js') : ''}
       </head>
       <body>
