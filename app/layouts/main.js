@@ -2,7 +2,7 @@ module.exports = async function ($) {
   const host =
     process.env.NODE_ENV == 'production'
       ? 'https://weblang.org/api'
-      : 'http://localhost:5777
+      : 'http://localhost:5777'
 
   return /* html */ `
     <!doctype html>
