@@ -2,7 +2,7 @@
 title: About Weblang low code programming language
 description: Weblang is easy to use and learn, minimizes human error, trivial to share and, platform and language agnostic, safe, fast and extendable.
 ---
-## About
+## About Weblang
 
 Weblang is created by Vidar Eldøy at [Eldøy Projects.](https://eldoy.com)
 
