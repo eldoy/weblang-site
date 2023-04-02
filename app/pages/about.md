@@ -1,3 +1,7 @@
+---
+title: About Weblang low code programming language
+description: Weblang is easy to use and learn, minimizes human error, trivial to share and, platform and language agnostic, safe, fast and extendable.
+---
 ## About
 
 Weblang is created by Vidar Eldøy at [Eldøy Projects.](https://eldoy.com)
@@ -20,6 +24,6 @@ As we move towards automated programming using machine learning, using minimal b
 
 As an example of what you can do with Weblang, check out [_Flekk_](https://github.com/eldoy/flekk), our JSON API testing library. It makes writing tests for your API such an incredible breeze.
 
-**[Send me a message](https://github.com/eldoy)** if you have any feedback!
+**[Send us a message](https://github.com/eldoy)** if you have any feedback!
 
 Enjoy!

@@ -27,10 +27,10 @@
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "license": "ISC",
   "dependencies": {
-    "sass": "^1.57.1",
-    "waveorb": "^0.30.36"
+    "sass": "^1.60.0",
+    "waveorb": "^0.32.4"
   },
   "devDependencies": {
-    "concurrently": "^7.6.0"
+    "concurrently": "^8.0.1"
   }
 }

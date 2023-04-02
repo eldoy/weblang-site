@@ -1,3 +1,7 @@
+---
+title: Low code programming language
+description: The Weblang low code programming language lets you write safe, portable and efficient code with minimal logic.
+---
 # Weblang
 
 The Weblang low code programming language lets you write safe, portable and efficient code with minimal logic. Created to let users run code on your server, but can be extended to run anything anywhere.

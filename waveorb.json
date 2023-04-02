@@ -1,3 +1,4 @@
 {
-  "domains": "weblang.org www.weblang.org"
+  "domains": "weblang.org www.weblang.org",
+  "sitemap": true
 }

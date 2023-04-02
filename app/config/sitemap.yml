@@ -1,0 +1,10 @@
+hostname: https://weblang.org
+urls:
+  - url: /
+    lastmodfile: app/pages/index.md
+    changefreq: weekly
+    priority: 1.0
+  - url: /about
+    lastmodfile: app/pages/about.md
+    changefreq: weekly
+    priority: 0.8
