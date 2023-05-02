@@ -90,7 +90,7 @@ Variables are stored in `state.vars`:
 # Set variable, nested, dot notation
 =hello.name: world
 
-# Delete variable, $hello is undefined
+# Delete variable, making $hello undefined
 =hello: null
 
 # Delete value from object
