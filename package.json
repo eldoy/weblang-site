@@ -27,8 +27,8 @@
   "author": "Vidar Eldøy <vidar@eldoy.com>",
   "license": "ISC",
   "dependencies": {
-    "sass": "^1.60.0",
-    "waveorb": "^0.32.4"
+    "sass": "^1.62.1",
+    "waveorb": "^0.32.5"
   },
   "devDependencies": {
     "concurrently": "^8.0.1"
