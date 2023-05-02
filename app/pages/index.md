@@ -28,92 +28,110 @@ npm i weblang
 
 ```js
 const weblang = require('weblang')
-const code = '$hello: world'
-const state = await weblang()(code)
+const code = '=hello: world'
+const state = await weblang.init(code)
 ```
 
 ### How it works
 
-Generally, variables start with the `$` character, and functions start with `@`.
+Generally, setting a variable starts with `=`, variable lookup starts with `$`, and functions start with `@`.
 
 Variables have dynamic types, just as with YAML. All variables are global, there is no scope, not even inside _if_ and _else_ blocks.
 
 Functions are added through _extensions_. Even the core functionality can be overridden, Weblang is meant to be extended.
 
+### Set and Get variables
 
-### Set
+Variables are stored in `state.vars`:
 
-Set variables, _starting with $_, available in `state.vars`:
+* Setting a variable starts with `=`
+* Getting a variable starts with `$`
 
 ```yml
 # Set string variable
-$hello: world
+=hello: world
+
+# Set number variable
+=number: 1
+
+# Set bool variable
+=hello: true
 
 # Set object variable
-$hello:
+=hello:
   a: 1
   b: 2
 
+# Set object one liner syntax
+=hello: { a: 1, b: 2 }
+
 # Set array variable
-$hello:
+=hello:
   - 1
   - 2
 
-# Set bool variable
-$hello: true
+# Set array one liner syntax
+=hello: [1, 2]
 
 # Set variable from other variable
-$hello: world
-$bye: $hello
+=hello: world
+=bye: $hello
 
 # Set object value from other variable
-$hello: world
-$bye:
+=hello: world
+=bye:
   name: $hello
 
 # Set array index from other variable
-$hello: world
-$bye:
+=hello: world
+=bye:
   - $hello
 
 # Set variable, nested, dot notation
-$hello.name: world
+=hello.name: world
 
-# Delete variable
-$hello: null
+# Delete variable, $hello is undefined
+=hello: null
 
 # Delete value from object
-$hello:
+=hello:
   name: null
 
 # Delete value from object, dot notation
-$hello.name: null
+=hello.name: null
 
 # Delete array index, dot notation
-$hello[0]: null
+=hello[0]: null
 
 # Set variable from object, dot notation
-$hello:
+=hello:
   name:
     deep: 1
-$bye: $hello.name.deep
+=bye: $hello.name.deep
 
 # Set variable from array, dot notation
-$hello:
+=hello:
   - 1
   - 2
-$bye: $hello[0]
+=bye: $hello[0]
 
 # Set variable from object array, dot notation
-$hello:
+=hello:
   - name: nils
-$bye: $hello[0].name
+=bye: $hello[0].name
 
 # Non existing variables are empty strings
-$bye: $hello
+=bye: $hello
 
 # Set literal '$', prevents var lookup
-$bye: $$hello
+=bye: $$hello
+
+# Setting the same object variable merges the values
+=hello: { a: 1 }
+=hello: { b: 2 }
+
+@log: $hello
+# { a: 1, b: 2 }
 ```
 
 ### If then else
@@ -127,7 +145,7 @@ Minimal logic is achieved through _@if, @then and @else_:
     name:
       eq: nils
 @then:
-  $hello.name: hans
+  =hello.name: hans
 
 # Multiple checks
 @if:
@@ -138,13 +156,13 @@ Minimal logic is achieved through _@if, @then and @else_:
     pathname:
       eq: /hello
 @then:
-  $hello.name: hans
+  =hello.name: hans
 
 # Checks works with dot notation as well
 @if:
   $hello.name.eq: nils
 @then:
-  $hello.name: hans
+  =hello.name: hans
 
 # If then else
 @if:
@@ -152,9 +170,9 @@ Minimal logic is achieved through _@if, @then and @else_:
     name:
       eq: hans
 @then:
-  $hello.name: guri
+  =hello.name: guro
 @else:
-  $hello.name: kari
+  =hello.name: kari
 ```
 
 The validations inside the if-section are from [the d8a validations:](https://github.com/eldoy/d8a)
@@ -214,22 +232,22 @@ The _@return_ command sets a variable in `state.return`. Using _@return_ causes 
 @return: hello
 
 # Return a string variable
-$hello: world
+=hello: world
 @return: $hello
 
 # Return an object variable
-$hello:
+=hello:
   name: world
 @return: $hello
 
 # Return an array variable
-$hello:
+=hello:
   - 1
   - 2
 @return: $hello
 
 # Return a variable, dot notation
-$hello:
+=hello:
   name:
     baner: 1
 @return: $hello.name
@@ -241,27 +259,9 @@ You can prefill the state with your own variables:
 
 ```js
 const req = { pathname: '/hello' }
-const run = await weblang({
+const state = await weblang.init(code, {
   vars: { req }
 })
-```
-
-Use some _code_ like this:
-```yml
-# Modify pathname
-$req.pathname: /bye
-
-# Return the modified pathname
-@return: $req.pathname
-```
-
-Then run with:
-```js
-await run(code)
-
-// Pass params to extensions
-const params = { name: 'hello' }
-await run(code, params)
 ```
 
 ### Pipes
@@ -270,30 +270,30 @@ Variables can be run through _pipes_, which are functions that transform a value
 
 If the pipe does not exist, it is ignored.
 
-Currently 3 built in pipes exist:
-* __upcase__ - transform a string value to upper case
-* __downcase__ - transform a string value to lower case
-* __capitalize__ - capitalize the first letter of a string
+Currently there are no built in pipes.
 
 ```yml
 # Use pipes with string
-$hello: hello | upcase
+=hello: hello | upcase
 
 # Use pipes with variables
-$hello: hello
-$bye: $hello | upcase
+=hello: hello
+=bye: $hello | upcase
 
 # Use pipes with return
 @return: hello | capitalize
 
 # Multiple pipes
 @return: hello | upcase | downcase | capitalize
+
+# Pipe parameters
+@return: hello | join delimiter=+ max=5
 ```
 
-You can add your own pipes or replace the existing ones using the _pipes_ option:
+You can add your own pipes, or replace the built in ones, using the _pipes_ option:
 ```js
 // Add a pipe named 'hello'
-const run = await weblang({
+const state = await weblang.init(code, {
   pipes: {
     hello: function(str) {
       if (typeof str != 'string') return str
@@ -310,34 +310,32 @@ and the use it like this:
 
 ### Extensions
 
-Weblang can (and should) be extended with your own commands. Define an extension function like this:
+Weblang can (and should) be extended with your own commands.
+
+Define an extension function like this:
 
 ```js
-// Function called db
-const db = function({
-  state,  // the runner's state with vars and return
-  code,   // the actual code sent to weblang, untouched
-  blob,   // the internal object used by weblang, with ids
-  raw,    // the object you send to this function
-  val,    // the object, variables and pipes applied
-  key,    // the name of the function, here 'db'
-  setter, // store the result in this variable
-  id,     // the duplicate key id, if any
-  run,    // the run function that runs your code
-  set,    // use this to set variables, prefix with '$'
-  get,    // use this to get variables and run pipes
-  ok,     // the validation function used for if tests
-  opt,    // the options passed to weblang
-  params, // parameters passed to your extensions
-  expand, // the expander function used internally
-  pipes,  // the pipe functions
-  util,   // util functions
-  load,   // the loader, converts yml string to object
-  core    // the core extension functions
+// Extension function called db
+function db({
+  state,    // the runner's state with vars and return
+  code,     // the actual code sent to weblang, untouched
+  tree,     // the syntax tree like object, with ids
+  branch,   // the current object being processed
+  node,     // the key of the current branch
+  current,  // the value of the current branch
+  key,      // the setter key, usually starts with '='
+  id,       // the internal id of the node
+  run,      // the run function that runs your code
+  opt,      // the options passed to weblang
+  expand,   // the expander function used internally
+  load,     // the loader, converts yml string to object
+  get,      // use this to get variables and run pipes
+  set,      // use this to set variables
+  ok        // the validation function used for if tests
 }) {
 
   // Example use of set
-  set('$internal', 'hello')
+  set('=internal', 'hello')
 
   // Whatever you return will be in your setter
   return { id: '1' }
@@ -346,57 +344,74 @@ const db = function({
 
 Add the function to the runner like this:
 
+Write the _code_ like this:
 ```js
-const run = await weblang({
+var code = '@db: user/create'
+```
+
+then run the code like this, while also adding the extension:
+```js
+const state = await weblang.init(code, {
   ext: { db }
 })
-```
-
-Write the _code_ like this:
-```yml
-@db: user/create
-```
-
-and run with the extension like this:
-```js
-const state = await run(code)
 ```
 
 To set the result of the function, use the _extension variable setter syntax_:
 
 ```yml
-@db$result: user/create
+=result@db: user/create
 ```
 
 and the `result` variable will be available in `state.vars.result`.
 
-### Duplicate keys
+### Renderers
 
-YAML doesn't normally support duplicate keys, but Weblang does! It is automatically handled for you:
+After setting up your data, you can pass them to _renderer functions_.
 
-```yml
-@if:
-  $req.pathname.eq: /users
-@then:
-  $hello: lasse
+The renderer functions are added like with extensions, and have access to the same parameters, and also the `body` and `lang` values.
 
-# No problem with a second if here
-@if:
-  $req.pathname.eq: /projects
-@then:
-  $hello: nils
+`body` is the template body between the triple backticks, and `lang` is the name of the renderer your specified, in the previous example called `tomarkup`:
+
+```js
+// Create a renderer supporting markdown and mustache
+const tomarkup = require('tomarkup')
+const formatter = tomarkup()
+
+function tomarkup({ val, body }) {
+  const { html } = formatter(body, val)
+  return html
+}
 ```
 
-If you use duplicate keys in a variable, the last one overwrites the first one:
-```yml
-$hello:
-  name: kari
-  name: ola
+Use the triple backtick syntax along with the name of the renderer you want to use.
 
-# $hello.name is 'ola'
+Renderer functions work very nicely with the built in `@return` extension:
+
+````yml
+# Get your user from the database
+=user@db: user/get
+@return: $user |
+  ```tomarkup
+  <h1>{{name}}</h1>
+  ```
+````
+
+Add a renderer function like this:
+```js
+const state = await weblang.init(code, {
+  renderers: { tomarkup }
+})
 ```
 
-Internally the keys are added to anything starting with a `$` and `@`, using a unique identifier starting with the `#` character.
+You can also create an "empty" renderer that neither uses data or a renderer function like this:
+
+````yml
+# Get your user from the database
+@return: _ |
+  ```
+  404 not found!
+  ```
+````
 
 ### License
 
