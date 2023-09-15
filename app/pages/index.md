@@ -301,8 +301,6 @@ function db({
 }
 ```
 
-Add the function to the runner like this:
-
 Write some code like this:
 ```js
 var code = '@db: user/create'
