@@ -27,9 +27,9 @@ npm i weblang
 ### Usage
 
 ```js
-const weblang = require('weblang')
-const code = '=hello: world'
-const state = await weblang.init(code)
+let weblang = require('weblang')
+let code = '=hello: world'
+let state = await weblang.init().run(code)
 ```
 
 ### How it works
@@ -72,6 +72,9 @@ Variables are stored in `state.vars`:
 
 # Set array one liner syntax
 =hello: [1, 2]
+
+# Set array index
+=hello[0]: 3
 
 # Set variable from other variable
 =hello: world
@@ -258,52 +261,10 @@ The _@return_ command sets a variable in `state.return`. Using _@return_ causes 
 You can prefill the state with your own variables:
 
 ```js
-const req = { pathname: '/hello' }
-const state = await weblang.init(code, {
-  vars: { req }
-})
-```
-
-### Pipes
-
-Variables can be run through _pipes_, which are functions that transform a value.
-
-If the pipe does not exist, it is ignored.
-
-```yml
-# Use pipes with string
-=hello: hello | upcase
-
-# Use pipes with variables
-=hello: hello
-=bye: $hello | upcase
-
-# Use pipes with return
-@return: hello | capitalize
-
-# Multiple pipes
-@return: hello | upcase | downcase | capitalize
-
-# Pipe parameters
-@return: list | join delimiter=+ max=5
-```
-
-You can add your own pipes, or replace the built in ones, using the _pipes_ option:
-```js
-// Add a pipe named 'hello'
-const state = await weblang.init(code, {
-  pipes: {
-    hello: function(str) {
-      if (typeof str != 'string') return str
-      return 'hello ' + str
-    }
-  }
-})
-```
-and then use it like this:
-
-```yml
-@return: world | hello
+let req = { pathname: '/hello' }
+let state = await weblang
+  .init({ vars: { req }})
+  .run(code)
 ```
 
 ### Extensions
@@ -342,16 +303,14 @@ function db({
 
 Add the function to the runner like this:
 
-Write the _code_ like this:
+Write some code like this:
 ```js
 var code = '@db: user/create'
 ```
 
 then run the code like this, while also adding the extension:
 ```js
-const state = await weblang.init(code, {
-  ext: { db }
-})
+let state = await weblang.init({ ext: { db } }).run(code)
 ```
 
 To set the result of the function, use the _extension variable setter syntax_:
@@ -362,54 +321,52 @@ To set the result of the function, use the _extension variable setter syntax_:
 
 and the `result` variable will be available in `state.vars.result`.
 
-### Renderers
 
-After setting up your data, you can pass them to _renderer functions_.
+### Pipes
 
-The renderer functions are added like with extensions, and have access to the same parameters, and also the `body` and `lang` values.
+Variables can be run through _pipes_, which are functions that transform a value.
 
-`body` is the template body between the triple backticks, and `lang` is the name of the renderer your specified, in the previous example called `tomarkup`:
+If the pipe does not exist, it is ignored.
 
-```js
-// Example renderer supporting markdown and mustache
-const tomarkup = require('tomarkup')
-const formatter = tomarkup()
+```yml
+# Use pipes with string
+=hello: hello | upcase
 
-function tomarkup({ val, body }) {
-  const { html } = formatter(body, val)
-  return html
-}
+# Use pipes with variables
+=hello: hello
+=bye: $hello | upcase
+
+# Use pipes with return
+@return: hello | capitalize
+
+# Multiple pipes
+@return: hello | upcase | downcase | capitalize
+
+# Pipe parameters
+@return: list | join delimiter=+ max=5
 ```
 
-Use the triple backtick syntax along with the name of the renderer you want to use.
-
-Renderer functions work very nicely with the built in `@return` extension:
-
-````yml
-# Get your user from the database
-=user@db: user/get
-@return: $user |
-  ```tomarkup
-  <h1>{{name}}</h1>
-  ```
-````
-
-Add a renderer function like this:
+You can add your own pipes, or replace the built in ones, using the _pipes_ option:
 ```js
-const state = await weblang.init(code, {
-  renderers: { tomarkup }
-})
+// Add a pipe named 'hello'
+let state = await weblang
+  .init({
+    pipes: {
+      hello: function({ val }) {
+        if (typeof val != 'string') return val
+        return 'hello ' + val
+      }
+    }
+  })
+  .run(code)
+```
+and then use it like this:
+
+```yml
+@return: world | hello
 ```
 
-You can also create an "empty" renderer that neither uses data nor a renderer function like this:
-
-````yml
-# Return a string from the empty renderer
-@return: _ |
-  ```
-  404 not found!
-  ```
-````
+The pipes receive all the same variables as with extensions.
 
 ### License
 
